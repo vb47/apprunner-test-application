@@ -26,17 +26,8 @@ def get_weather_data(request):
     soup = BeautifulSoup(html, 'html.parser')
     
     # get the temperature
-    temp = soup.find('div', attrs={'class': 'BNeawe iBp4i AP7Wnd'}).text
-
-    # this contains time and sky description
-    str = soup.find('div', attrs={'class': 'BNeawe tAd8D AP7Wnd'}).text
-
-    # format the data
-    data = str.split('\n')
-    time = data[0]
-    sky = data[1]
-    # printing all the data
-    str = "Temperature is"+ temp + "Time: " + time + "Sky Description: " + sky
+    temp = soup.find('span', attrs={'id': 'wob_tm'}).text
+    str = "Temperature is"+ temp
     return Response(str)
 
 if __name__ == '__main__':
@@ -44,9 +35,6 @@ if __name__ == '__main__':
     with Configurator() as config:
         config.add_route('hello', '/')
         config.add_view(get_weather_data, route_name='hello')
-        
-        config.add_route('weather', '/weather')
-        config.add_view(get_weather_data, route_name='weather')
         
         app = config.make_wsgi_app()
     server = make_server('0.0.0.0', port, app)
