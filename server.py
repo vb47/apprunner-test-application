@@ -12,32 +12,36 @@ def hello_world(request):
     message = "Hello, " + name + "!\n"
     return Response(message)
 
-def get_weather_data(request):
-    # enter city name
-    city = "lucknow"
+def get_data(request):
+    # the target we want to open	
+	url='https://www.hindustantimes.com/'
+	
+	#open with GET method
+	resp=requests.get(url)
+	
+	#http_respone 200 means OK status
+	if resp.status_code==200:
+		print("Successfully opened the web page")
+		print("The news are as follow :-\n")
+	
+		# we need a parser,Python built-in HTML parser is enough .
+		soup=BeautifulSoup(resp.text,'html.parser')	
 
-    # create url
-    url = "https://www.google.com/search?q="+"weather"+city
-    resp = requests.get(url)
-    if(resp.status_code == 200):
-        # requests instance
-        html = resp.content
-
-        # getting raw data
-        soup = BeautifulSoup(html, "html.parser")
-
-        # get the temperature
-        temp = soup.find("span", attrs={"id": "wob_tm"}).get_text()
-        str = "<h1>Temperature is " + temp + "</h1>"
-        return Response(str)
-    else:
-        return "Error Code: " + str(resp.status_code)
+		# l is the list which contains all the text i.e news
+		l=soup.find("h3",{"class":"hdg3"})
+	
+		#now we want to print only the text part of the anchor.
+		#find all the elements of a, i.e anchor
+		for i in l.findAll("a"):
+			print(i.text)
+	else:
+		print(resp.status_code)
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT"))
     with Configurator() as config:
         config.add_route('hello', '/')
-        config.add_view(get_weather_data, route_name='hello')
+        config.add_view(get_data, route_name='hello')
         
         app = config.make_wsgi_app()
     server = make_server('0.0.0.0', port, app)
