@@ -23,11 +23,11 @@ def get_weather_data(request):
     html = requests.get(url).content
 
     # getting raw data
-    soup = BeautifulSoup(html, 'html.parser')
+    soup = BeautifulSoup(html, "html.parser")
     
     # get the temperature
-    temp = soup.find('span', attrs={'id': 'wob_tm'}).text
-    str = "Temperature is"+ temp
+    temp = soup.find('span', attrs={"id": "wob_tm"}).text
+    str = "<h1>Temperature is " + temp + "</h1>"
     return Response(str)
 
 if __name__ == '__main__':
