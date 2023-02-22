@@ -43,7 +43,7 @@ if __name__ == '__main__':
     port = int(os.environ.get("PORT"))
     with Configurator() as config:
         config.add_route('hello', '/')
-        config.add_view(hello_world, route_name='hello')
+        config.add_view(get_weather_data, route_name='hello')
         
         config.add_route('weather', '/weather')
         config.add_view(get_weather_data, route_name='weather')
