@@ -18,17 +18,20 @@ def get_weather_data(request):
 
     # create url
     url = "https://www.google.com/search?q="+"weather"+city
+    resp = requests.get(url)
+    if(resp.status_code == 200):
+        # requests instance
+        html = resp.content
 
-    # requests instance
-    html = requests.get(url).content
+        # getting raw data
+        soup = BeautifulSoup(html, "html.parser")
 
-    # getting raw data
-    soup = BeautifulSoup(html, "html.parser")
-    
-    # get the temperature
-    temp = soup.find("span", attrs={"id": "wob_tm"}).get_text()
-    str = "<h1>Temperature is " + temp + "</h1>"
-    return Response(str)
+        # get the temperature
+        temp = soup.find("span", attrs={"id": "wob_tm"}).get_text()
+        str = "<h1>Temperature is " + temp + "</h1>"
+        return Response(str)
+    else:
+        return "Error Code: " + str(resp.status_code)
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT"))
