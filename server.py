@@ -32,10 +32,12 @@ def get_data(request):
 	
 		#now we want to print only the text part of the anchor.
 		#find all the elements of a, i.e anchor
+		str = ""
 		for i in l.findAll("a"):
-			print(i.text)
+			str = str + i.text + " "
+		return Response(str)
 	else:
-		print(resp.status_code)
+		return Response("Error: " + str(resp.status_code))
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT"))
