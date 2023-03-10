@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import os
 
 from wsgiref.simple_server import make_server
 from pyramid.config import Configurator
